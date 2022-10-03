@@ -1,0 +1,98 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  email String [unique, not null]
+  password String [not null]
+  displayname String
+  provider String
+  person Person [not null]
+  gender Gender [not null]
+  genderId Int [not null]
+  receipt Receipt [not null]
+  roleForPerson RoleForPerson [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+  isActive Boolean [not null, default: true]
+}
+
+Table Role {
+  id Int [pk, increment]
+  name String [not null]
+  roleForPerson RoleForPerson [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+  isActive Boolean [not null, default: true]
+}
+
+Table RoleForPerson {
+  id Int [pk, increment]
+  user User [not null]
+  userId Int [not null]
+  role Role [not null]
+  roleId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+  isActive Boolean [not null, default: true]
+}
+
+Table Gender {
+  id Int [pk, increment]
+  type String
+  user User [not null]
+  Person Person [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+  isActive Boolean [not null, default: true]
+}
+
+Table Person {
+  id Int [pk, increment]
+  name String
+  phone String
+  address String [not null]
+  dateOfbirthday DateTime [not null]
+  user User [not null]
+  receipt Receipt [not null]
+  gender Gender [not null]
+  genderId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+  isActive Boolean [not null, default: true]
+}
+
+Table Receipt {
+  id Int [pk, increment]
+  drug String
+  name String
+  dose String
+  freq String
+  route String
+  note String
+  User User
+  userId Int
+  Person Person
+  personId Int
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+  isActive Boolean [not null, default: true]
+}
+
+Table PersonToUser {
+  personId Int [ref: > Person.id]
+  userId Int [ref: > User.id]
+}
+
+Ref: User.genderId > Gender.id [delete: No Action]
+
+Ref: RoleForPerson.userId > User.id
+
+Ref: RoleForPerson.roleId > Role.id
+
+Ref: Person.genderId > Gender.id
+
+Ref: Receipt.userId > User.id [delete: No Action]
+
+Ref: Receipt.personId > Person.id
